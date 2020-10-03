@@ -1,4 +1,4 @@
-function TS_FeatureFeatureScatter(whatData,opIDs)
+function TS_FeatureFeatureScatter(whatData,opIDs,doNormalize)
 % For Empirical1000
 
 if nargin < 1
@@ -7,6 +7,10 @@ end
 if nargin < 2
     opIDs = [871,7704];
 end
+if nargin < 3
+    doNormalize = true;
+end
+%-------------------------------------------------------------------------------
 
 assert(length(opIDs)==2);
 
@@ -21,6 +25,12 @@ colorCell = GiveMeColors(length(tsClasses));
 filterToTwo = ismember(Operations.ID,opIDs);
 TS_DataMat = TS_DataMat(:,filterToTwo);
 Operations = Operations(filterToTwo,:);
+
+%-------------------------------------------------------------------------------
+if doNormalize
+    % TS_DataMat = arrayfun(@log10,TS_DataMat);
+    TS_DataMat = BF_NormalizeMatrix(TS_DataMat,'sigmoid');
+end
 
 f = figure('color','k');
 hold('on')
@@ -52,8 +62,13 @@ axis('square');
 ax.Color = 'k';
 ax.XColor = 'w';
 ax.YColor = 'w';
-xlabel(Operations.Name{1},'interpreter','none')
-ylabel(Operations.Name{2},'interpreter','none')
+if doNormalize
+    xlabel(sprintf('%s (normalized)',Operations.Name{1}),'interpreter','none')
+    ylabel(sprintf('%s (normalized)',Operations.Name{2}),'interpreter','none')
+else
+    xlabel(Operations.Name{1},'interpreter','none')
+    ylabel(Operations.Name{2},'interpreter','none')
+end
 
 r = corr(TS_DataMat(:,1),TS_DataMat(:,2),'type','Spearman');
 title(sprintf('rho = %.3f',r),'color','w')

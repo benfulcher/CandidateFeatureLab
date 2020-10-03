@@ -27,7 +27,7 @@ TS_Combine('HCTSA_Empirical1000.mat','HCTSA_newFeatures.mat',true,true,'HCTSA_me
 ```matlab
 load('HCTSA_merged.mat','Operations');
 theID = Operations.ID(strcmp(Operations.Name,'myNewFeature'));
-TS_SimSearch(theID,'tsOrOps','ops','numNeighbors',40,'whatDataFile','HCTSA_merged.mat','whatPlots',{'scatter','matrix'})
+TS_SimSearch(theID,'tsOrOps','ops','numNeighbors',40,'whatData','HCTSA_merged.mat','whatPlots',{'scatter','matrix'})
 ```
 
 You can also run the specific file in this repository, e.g.,:
